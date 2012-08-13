@@ -1,8 +1,0 @@
-production:
-  secret: VRe9SiZwvFz74LIjyeCMLwnWvankKJZqs0bgZLhzA4Dq6G30r1cxJwjT77WCcFL
-
-development:
-  secret: VRe9SiZwvFz74LIjyeCMLwnWvankKJZqs0bgZLhzA4Dq6G30r1cxJwjT77WCcFL
-
-test:
-  secret: VRe9SiZwvFz74LIjyeCMLwnWvankKJZqs0bgZLhzA4Dq6G30r1cxJwjT77WCcFL
