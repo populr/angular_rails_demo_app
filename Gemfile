@@ -49,4 +49,5 @@ group :test do
   gem 'fuubar'
   gem 'spork', '>= 0.9.1'
   gem 'capybara', '>= 1.1.1'
+  gem 'pry-rails'
 end

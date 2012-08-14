@@ -35,3 +35,13 @@ AngularRailsDemoApp::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 end
+
+# Use pry for rails console
+silence_warnings do
+  begin
+    require 'pry'
+    require 'pry-nav'
+    IRB = Pry
+  rescue LoadError
+  end
+end
