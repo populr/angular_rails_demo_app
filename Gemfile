@@ -50,4 +50,5 @@ group :test do
   gem 'spork', '>= 0.9.1'
   gem 'capybara', '>= 1.1.1'
   gem 'pry-rails'
+  gem 'database_cleaner'
 end

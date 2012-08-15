@@ -34,7 +34,27 @@ Spork.prefork do
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
     # instead of true.
-    config.use_transactional_fixtures = true
+    config.use_transactional_fixtures = false # handled by DatabaseCleaner
+    
+    config.before :suite do
+      DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.clean_with(:truncation)
+    end
+    
+    # Request specs cannot use a transaction because Capybara runs in a
+    # separate thread with a different database connection.
+    config.before type: :request do
+      DatabaseCleaner.strategy = :truncation
+    end
+    
+    config.before do
+      DatabaseCleaner.start
+    end
+    
+    config.after do
+      DatabaseCleaner.clean
+    end
+    
   end
 
 end
