@@ -50,5 +50,17 @@ describe Recipe do
   it "should respond to ingredients" do
     recipe.should respond_to(:ingredients)
   end
+  
+  it "should respond to owner" do
+    recipe.should respond_to(:owner)
+  end
+  
+  describe "validations" do
+    it { should validate_presence_of :owner_id }
+    it { should validate_presence_of :name }
+    it { should validate_presence_of :cook_time }
+    it { should validate_presence_of :servings }
+    it { should validate_presence_of :instructions }
+  end
 
 end
