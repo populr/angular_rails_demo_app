@@ -38,12 +38,15 @@ gem 'jquery-rails'
 # gem 'debugger'
 
 group :test, :development do
+  gem 'factory_girl', '2.2.0'
+  gem 'factory_girl_rails'
+  gem 'guard-rspec'
+  gem 'guard-spork'
+end
+
+group :test do
   gem 'rspec-rails'
   gem 'fuubar'
   gem 'spork', '>= 0.9.1'
-  gem 'factory_girl', '2.2.0'
-  gem 'factory_girl_rails'
   gem 'capybara', '>= 1.1.1'
-  gem 'guard-rspec'
-  gem 'guard-spork'
 end
