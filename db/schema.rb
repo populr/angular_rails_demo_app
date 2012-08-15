@@ -11,16 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120811214044) do
+ActiveRecord::Schema.define(:version => 20120815001625) do
 
   create_table "recipes", :force => true do |t|
-    t.integer  "owner_id",     :null => false
-    t.string   "name",         :null => false
-    t.integer  "cook_time",    :null => false
-    t.integer  "servings",     :null => false
-    t.text     "instructions", :null => false
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.integer  "owner_id",           :null => false
+    t.string   "name",               :null => false
+    t.integer  "cook_time",          :null => false
+    t.integer  "servings",           :null => false
+    t.text     "instructions",       :null => false
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
   end
 
   add_index "recipes", ["owner_id"], :name => "index_recipes_on_owner_id"
