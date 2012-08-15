@@ -51,4 +51,5 @@ group :test do
   gem 'capybara', '>= 1.1.1'
   gem 'pry-rails'
   gem 'database_cleaner'
+  gem 'shoulda-matchers'
 end
