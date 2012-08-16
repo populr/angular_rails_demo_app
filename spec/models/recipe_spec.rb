@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Recipe do
-  
+
   describe "attributes" do
     let(:recipe) { Recipe.new }
 
@@ -11,7 +11,7 @@ describe Recipe do
       end
     end
   end
-  
+
   describe "validations" do
     it { should validate_presence_of :owner_id }
     it { should validate_presence_of :name }
