@@ -1,6 +1,6 @@
 notification :off
 
-group :specs do
+group :spec do
 
   guard :spork, :cucumber_env => { 'RAILS_ENV' => 'test' }, :rspec_env => { 'RAILS_ENV' => 'test' } do
     watch('app/models/user.rb')
@@ -31,6 +31,12 @@ group :specs do
     watch('app/controllers/application_controller.rb')  { "spec/controllers" }
     # Capybara request specs
     watch(%r{^app/views/(.+)/.*\.(erb|haml)$})          { |m| "spec/requests/#{m[1]}_spec.rb" }
+  end
+
+  guard 'jasmine' do
+    watch(%r{spec/javascripts/spec\.(js\.coffee|js|coffee)$})         { "spec/javascripts" }
+    watch(%r{spec/javascripts/.+_spec\.(js\.coffee|js|coffee)$})
+    watch(%r{app/assets/javascripts/(.+?)\.(js\.coffee|js|coffee)$})  { |m| "spec/javascripts/#{m[1]}_spec.#{m[2]}" }
   end
 
 end
