@@ -124,7 +124,6 @@ describe "RecipesCtrl", () ->
         expect(ctrl.recipeFormVisible).toBe(false)
 
       it "should add the newly created recipe to $scope.recipes", () ->
-        $httpBackend.expectPOST('/recipes').respond 200, single_recipe_data
         expect(ctrl.recipes.length).toEqual(0)
         ctrl.save()
         $httpBackend.flush()
@@ -134,15 +133,15 @@ describe "RecipesCtrl", () ->
       beforeEach () ->
         single_recipe_data.errors =
           title: ["can't be blank"]
+        $httpBackend.expectPOST('/recipes').respond 200, single_recipe_data
 
       it "should not hide the recipe form", () ->
-        ctrl.newRecipe()
+        expect(ctrl.recipeFormVisible).toBe(true)
         ctrl.save()
         $httpBackend.flush()
         expect(ctrl.recipeFormVisible).toBe(true)
 
       it "should not add the newly created recipe to $scope.recipes", () ->
-        $httpBackend.expectPOST('/recipes').respond 200, single_recipe_data
         expect(ctrl.recipes.length).toEqual(0)
         ctrl.save()
         $httpBackend.flush()
