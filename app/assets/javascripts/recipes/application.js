@@ -1,1 +1,1 @@
-//= require_tree recipes/.
+//= require_tree ./

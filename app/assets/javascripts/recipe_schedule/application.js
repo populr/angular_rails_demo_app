@@ -1,1 +1,1 @@
-//= require_tree recipe_schedule/.
+//= require_tree ./

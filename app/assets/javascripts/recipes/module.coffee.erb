@@ -23,3 +23,24 @@ recipes = ($resource) ->
                                 }
 recipeModule.factory 'Recipe', ['$resource', recipes ]
 
+
+ingredients = ($resource) ->
+  $resource '/ingredients/:id', {}, {
+                                  index:   { method: 'GET', isArray: true },
+                                  show:    { method: 'GET' },
+                                  create:  { method: 'POST' },
+                                  update:  { method: 'PUT' },
+                                  destroy: { method: 'DELETE' }
+                                }
+recipeModule.factory 'Ingredient', ['$resource', ingredients ]
+
+
+
+
+recipeModule.directive 'suggestIngredient', () ->
+  link: (scope, el, attrs) ->
+    setTimeout ->
+      el.typeahead
+        source: scope.existing_ingredients
+        mode: 'multiple'
+
