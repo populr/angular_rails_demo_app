@@ -13,15 +13,36 @@ describe "RecipesCtrl", () ->
   $httpBackend = null
   $controller = null
   Recipe = null
+  Ingredient = null
   single_recipe_data = null
   multiple_recipe_data = null
+  asparagus_data = null
+  ginger_data = null
+  multiple_ingredient_data = null
 
   beforeEach inject ($injector) ->
     $httpBackend = $injector.get '$httpBackend'
     $rootScope = $injector.get '$rootScope'
     $controller = $injector.get '$controller'
     Recipe = $injector.get 'Recipe'
+    Ingredient = $injector.get 'Ingredient'
 
+
+    asparagus =
+      id: 'efg',
+      recipe_id: 'abc',
+      ingredient_id: 'qrs',
+      name: 'asparagus',
+      unit: 'lb',
+      amount: 1
+
+    ginger =
+      id: 'hij',
+      recipe_id: 'abc',
+      ingredient_id: 'tuv',
+      name: 'ginger',
+      unit: 'T',
+      amount: 0.5
 
     single_recipe_data =
       id: 'abc'
@@ -30,16 +51,30 @@ describe "RecipesCtrl", () ->
       cook_time: 600
       servings: 4
       instructions: 'Trim. Mince. Cook'
-      recipe_ingredients: [ { name: 'asparagus', unit: 'lb', amount: 1 }, { name: 'ginger', unit: 'T', amount: 0.5 } ]
+      recipe_ingredients: [asparagus, ginger]
 
     multiple_recipe_data = [single_recipe_data]
+
+
+    asparagus_data =
+      id: 'qrs'
+      name: 'Asparagus'
+
+    ginger_data =
+      id: 'tuv'
+      name: 'Ginger'
+
+    multiple_ingredient_data = [asparagus_data, ginger_data]
 
 
     ctrl = $rootScope.$new()
     $httpBackend.whenGET('/recipes').respond 200, []
     $httpBackend.whenGET('/recipes/new').respond 200, {}
     $httpBackend.whenPOST('/recipes').respond 200, {}
-    $controller(RecipesCtrl, {$scope: ctrl, Recipe: Recipe })
+
+    $httpBackend.whenGET('/ingredients').respond 200, []
+
+    $controller(RecipesCtrl, { $scope: ctrl, Recipe: Recipe, Ingredient: Ingredient })
 
 
   it "should auto-load the index of recipes", () ->
@@ -49,10 +84,10 @@ describe "RecipesCtrl", () ->
     expect(ctrl.recipes).toEqualData multiple_recipe_data
 
   describe "#newRecipe", () ->
-    it "should set $scope.recipeFormVisible to true", () ->
-      expect(ctrl.recipeFormVisible).toBe(false)
+    it "should call $scope.showRecipeForm", () ->
+      spyOn(ctrl, 'showRecipeForm')
       ctrl.newRecipe()
-      expect(ctrl.recipeFormVisible).toBe(true)
+      expect(ctrl.showRecipeForm).toHaveBeenCalled()
 
     it "should assign $scope.recipe to a new object with an unsavedRecipe attribute set to true", () ->
       expect(ctrl.recipe).toBeNull()
@@ -71,10 +106,11 @@ describe "RecipesCtrl", () ->
       ctrl.edit(recipe)
       expect(ctrl.recipe).toEqualData(recipe)
 
-    it "should set $scope.recipeFormVisible to true", () ->
-      expect(ctrl.recipeFormVisible).toBe(false)
+    it "should call $scope.showRecipeForm", () ->
+      spyOn(ctrl, 'showRecipeForm')
       ctrl.edit(recipe)
-      expect(ctrl.recipeFormVisible).toBe(true)
+      expect(ctrl.showRecipeForm).toHaveBeenCalled()
+
 
   describe "#save an existing recipe", () ->
     recipe = null
@@ -90,21 +126,23 @@ describe "RecipesCtrl", () ->
 
     describe "when validation passes", () ->
       it "should hide the recipe form", () ->
+        spyOn(ctrl, 'hideRecipeForm')
         $httpBackend.expectPUT('/recipes/abc').respond 200, single_recipe_data
         ctrl.edit(recipe)
         ctrl.save()
         $httpBackend.flush()
-        expect(ctrl.recipeFormVisible).toBe(false)
+        expect(ctrl.hideRecipeForm).toHaveBeenCalled()
 
     describe "when validation errors exist", () ->
       it "should not hide the recipe form", () ->
+        spyOn(ctrl, 'hideRecipeForm')
         single_recipe_data.errors =
           title: ["can't be blank"]
         $httpBackend.expectPUT('/recipes/abc').respond 200, single_recipe_data
         ctrl.edit(recipe)
         ctrl.save()
         $httpBackend.flush()
-        expect(ctrl.recipeFormVisible).toBe(true)
+        expect(ctrl.hideRecipeForm).not.toHaveBeenCalled()
 
   describe "#save a new recipe", () ->
     beforeEach () ->
@@ -118,10 +156,10 @@ describe "RecipesCtrl", () ->
 
     describe "when validation passes", () ->
       it "should hide the recipe form", () ->
-        expect(ctrl.recipeFormVisible).toBe(true)
+        spyOn(ctrl, 'hideRecipeForm')
         ctrl.save()
         $httpBackend.flush()
-        expect(ctrl.recipeFormVisible).toBe(false)
+        expect(ctrl.hideRecipeForm).toHaveBeenCalled()
 
       it "should add the newly created recipe to $scope.recipes", () ->
         expect(ctrl.recipes.length).toEqual(0)
@@ -146,4 +184,21 @@ describe "RecipesCtrl", () ->
         ctrl.save()
         $httpBackend.flush()
         expect(ctrl.recipes.length).toEqual(0)
+
+  describe "#showRecipeForm", () ->
+    it "should set ctrl.recipeFormVisible to true", () ->
+      ctrl.recipeFormVisible = false
+      ctrl.showRecipeForm()
+      expect(ctrl.recipeFormVisible).toBe(true)
+
+    it "should fetch the master list of ingredients", () ->
+      $httpBackend.expectGET('/ingredients').respond 200, multiple_ingredient_data
+      ctrl.showRecipeForm()
+      $httpBackend.flush()
+
+  describe "#hideRecipeForm", () ->
+    it "should set ctrl.recipeFormVisible to false", () ->
+      ctrl.recipeFormVisible = true
+      ctrl.hideRecipeForm()
+      expect(ctrl.recipeFormVisible).toBe(false)
 
