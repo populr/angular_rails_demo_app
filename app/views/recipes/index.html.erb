@@ -1,0 +1,12 @@
+<% content_for :angular_script, "recipes/application" %>
+<div data-ng-app="recipeModule" data-ng-controller="RecipesCtrl">
+
+  <div data-ng-repeat="recipe in recipes">
+  {{recipe.name}}
+  </div>
+
+  <div data-ng-show="recipeFormVisible">
+    <button class="btn" data-ng-click="hideRecipeForm()">Cancel</button>
+  </div>
+
+</div>
