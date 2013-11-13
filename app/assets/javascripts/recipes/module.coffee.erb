@@ -1,6 +1,7 @@
 recipeModule = angular.module('recipeModule', ['ngResource'])
 
 recipeModule.config ['$httpProvider', ($httpProvider) ->
+  $httpProvider.defaults.headers['common']['Accept'] = 'application/json'
   token = $("meta[name='csrf-token']").attr 'content'
   $httpProvider.defaults.headers['common']['X-CSRF-Token'] = token
 ]
